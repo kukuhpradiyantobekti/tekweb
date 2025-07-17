@@ -1,14 +1,10 @@
 <?php
 
-$koneksi = mysqli_connect("localhost", "root", "", "webti");
+require 'fungsi.php';
 
-if (!$koneksi) {
-    die("Koneksi gagal: " . mysqli_connect_error($koneksi));
-} else {
-    echo "Koneksi berhasil!!!";
-}
+$query = "SELECT * FROM mahasiswa";
 
-$result = mysqli_query($koneksi, "SELECT * FROM mahasiswa");
+$rows = query($query);
 
 /// ambil data (fetch) dari tabel mahasiswa
 
@@ -36,23 +32,33 @@ $result = mysqli_query($koneksi, "SELECT * FROM mahasiswa");
 </head>
 <body>
     <h1>Data Mahasiswa</h1>
-    <table border="1" cellpadding="10" cellspacing="10px">
+    <a href="tambahmhs.php"><button>Tambah Data Mahasiswa</button></a>
+    <table border="1" cellpadding="10px" cellspacing="0">
         <tr>
             <th>No</th>
+            <th>Foto</th>     
             <th>Nama</th>
             <th>NIM</th>
             <th>Jurusan</th>
             <th>no. hp</th>
+            <th>Aksi</th>
         </tr>
-        <?php while($mhs = mysqli_fetch_assoc($result)) { ?>
+        <?php 
+        $i = 1;
+        foreach($rows as $mhs) { ?>
         <tr>
-            <td><?php echo $mhs["id"]?></td>
+            <td><?php echo $i ?></td>
+            <td><img src="foto/<?= $mhs["foto"] ?>" width="200px"/></td>
             <td><?php echo $mhs["nama"]?></td>
             <td><?php echo $mhs["nim"]?></td>
             <td><?php echo $mhs["prodi"]?></td>
-            <td><?php echo $mhs["nohp"]?></td>    
+            <td><?php echo $mhs["nohp"]?></td>
+            <td>
+                <a href="ubahmhs.php?id=<?php echo $mhs["id"]?>">Ubah</a> |
+                <a href="hapusmhs.php?id=<?php echo $mhs["id"]?>" onclick="return confirm('yakin pora?')">Hapus</a>
+            </td>     
         </tr>
-        <?php } ?>
+        <?php $i++; } ?>
     </table>
 </body>
 </html>
